@@ -20,6 +20,7 @@
 
 
 ## Setup
+create DataBase in MongoDB
 
 create .env file in nodejs_auth
 
