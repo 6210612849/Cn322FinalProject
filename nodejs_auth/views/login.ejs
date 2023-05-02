@@ -1,0 +1,90 @@
+<!-- <h1>login</h1>
+  
+<form action="/api/v1/user/login" method="POST">
+    <input type="email" name="email"
+        placeholder="email">
+    <input type="password" name="password" 
+        placeholder="password">
+    <button>login</button>
+</form>
+  
+<h1>This is home page</h1>
+  
+<li><a href="/api/v1/user/register">Sign up!!</a></li>
+<li><a href="/api/v1/user/login">Login</a></li>
+<li><a href="/api/v1/user/logout">Logout</a></li> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>2FA Authentication Login</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>2FA Authentication Login</h1>
+
+    <form action="/api/v1/user/login" method="POST">
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+      </div>
+      <div>
+        <label for="token">token:</label>
+        <input type="text" id="token" name="token" />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#login-form").submit(function (event) {
+          event.preventDefault();
+          const email = $("#email").val();
+          const password = $("#password").val();
+          const token = $("#token").val();
+
+          $.ajax({
+            type: "POST",
+            url: "/api/v1/user/login",
+            data: { email, password, token },
+            success: function (response) {
+              alert("Login successful");
+              window.location.href = "/secret";
+            },
+            error: function (xhr, status, error) {
+              alert(xhr.responseText);
+            },
+          });
+        });
+
+        $("#register-form").submit(function (event) {
+          event.preventDefault();
+          const name = $("#name").val();
+          const email = $("#email").val();
+          const password = $("#password").val();
+
+          $.ajax({
+            type: "POST",
+            url: "/register",
+            data: { name, email, password },
+            success: function (response) {
+              $("#qr-code").attr("src", response.qrCode);
+              alert("Registration successful");
+            },
+            error: function (xhr, status, error) {
+              alert(xhr.responseText);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

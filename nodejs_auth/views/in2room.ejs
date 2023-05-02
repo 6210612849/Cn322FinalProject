@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<h1>This is home page for another user</h1>
+
+<head>
+
+</head>
+
+<body>
+
+    <div id="chat-messages">
+
+    </div>
+    <form id="chat-form">
+        <input type="text" id="chat-input">
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        const socket = io();
+        const params = new URLSearchParams(window.location.search);
+        const roomID = params.get('roomID');
+
+        socket.on('connect', () => {
+            console.log('Connected to Socket.IO server');
+
+
+            socket.emit('join room', roomID)
+            fetchChat()
+            socket.on('message', (message) => {
+                const chatMessages = document.getElementById('chat-messages');
+                const newMessage = document.createElement('div');
+                newMessage.innerText = message;
+                chatMessages.appendChild(newMessage);
+            });
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from Socket.IO server');
+        });
+
+
+
+
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        chatForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const message = chatInput.value;
+            socket.emit('message', message);
+            sendChat(message)
+            chatInput.value = '';
+
+
+        })
+
+
+
+        async function sendChat(myPayload) {
+            console.log("ayo")
+
+            const myInput = { roomID: roomID, payload: myPayload, writeBy: "test.ccp@gmail.com" }
+            const queryParams = new URLSearchParams(myInput);
+
+            const rawResponse = await fetch('http://localhost:5000/api/v1/mes/sendmessageByRoom?' + queryParams.toString(), {
+                method: 'POST',
+                headers: {
+
+                    'Content-Type': 'application/json'
+                },
+
+            })
+
+        };
+
+
+        async function fetchChat() {
+            console.log("ayo")
+
+            const myInput = { roomID: roomID, myEmail: "test.ccp@gmail.com" }
+            const queryParams = new URLSearchParams(myInput);
+
+            const rawResponse = await fetch('http://localhost:5000/api/v1/mes/readmessageByRoom?' + queryParams.toString(), {
+                method: 'POST',
+                headers: {
+
+                    'Content-Type': 'application/json'
+                },
+
+            })
+
+            rawResponse.json().then((data) => {
+                for (let i of data) {
+                    console.log(i)
+                    const chatMessages = document.getElementById('chat-messages');
+                    const newMessage = document.createElement('div');
+                    newMessage.innerText = i.payload;
+
+                    chatMessages.appendChild(newMessage);
+                }
+            })
+
+
+
+
+        };
+    </script>
+
+
+
+
+
+</body>

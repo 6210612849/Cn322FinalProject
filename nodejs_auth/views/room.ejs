@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Socket.IO Example</title>
+</head>
+
+<body>
+    <h1>Socket.IO Example</h1>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+        const socket = io();
+        socket.on('connect', () => {
+            console.log('Connected to Socket.IO server');
+        });
+        socket.on('disconnect', () => {
+            console.log('Disconnected from Socket.IO server');
+        });
+        socket.on('message', (data) => {
+            const messages = document.getElementById('messages');
+            const message = document.createElement('div');
+            message.innerText = data;
+            messages.appendChild(message);
+        });
+    </script>
+    <h1>User list</h1>
+    <ul id="dataList"></ul>
+    <script>
+        const dataList = document.getElementById('dataList');
+        console.log(
+            "work")
+        async function fetchUser() {
+            console.log("ayo")
+            fetch('http://localhost:5000/api/v1/chat/getalluser')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        const listItem = document.createElement('div');
+                        listItem.innerText = item.name;
+                        listItem.setAttribute('key', item.email)
+                        listItem.addEventListener('click', async () => {
+                            const myInput = { email1: "test.singup@gmail.com", email2: item.email }
+                            const queryParams = new URLSearchParams(myInput);
+
+                            const rawResponse = await fetch('http://localhost:5000/api/v1/chat/createchat?' + queryParams.toString(), {
+                                method: 'POST',
+                                headers: {
+
+                                    'Content-Type': 'application/json'
+                                },
+
+                            })
+
+
+                            if (rawResponse.status == 200) {
+                                const test = await (rawResponse.json())
+
+                                window.location.href = '/api/v1/chat/inroom?roomID=' + test.chatInviteID;
+                            }
+                        });
+
+                        dataList.appendChild(listItem);
+                    });
+                });
+        }
+        fetchUser()
+
+
+
+    </script>
+</body>
+
+</html>
