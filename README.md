@@ -2,20 +2,20 @@
 
 วัตถุประสงค์เพื่อสร้างแพลตฟอร์มโซเชียลเน็ตเวิร์คเพื่อนำมาศึกษาและวิเคราะห์ถึงความปลอดภัยบนเครือข่ายคอมพิวเตอร์
 
-![Tech Stack](images/techstack.png)
+![TechStack](images/techstack.png)
 
-Authentication
-*	สร้างการเข้าสู่ระบบด้วยรหัสผ่าน
+#### Authentication
+* สร้างการเข้าสู่ระบบด้วยรหัสผ่าน
 *	สร้างการยืนยันตัวตนสองชั้น 2FA ด้วย TOTP + Google Authenticator 
 *	บังคับให้สร้างบัญชีใหม่ด้วยรหัสผ่านที่เเข็งเเรง และมีความยาวอย่างน้อย 8 ตัวอักษร
 *	สร้างระบบ Email verificationผู้ใช้งานที่สร้างบัญชีใหม่ต้องทำการยืนยัน Email ก่อนถึงจะสามารถเข้าสู่ระบบได้
 *	ใช้งาน JWT(json web token)
 
-Chatroom
+#### Chatroom
 *	มีการตรวจสอบสิทธิ์ในการเข้าห้องเเชท 
 *	มีการEncrypt Message Chat ด้วย Publish key & Private key
 
-Database
+#### Database
 *	มีการ เข้ารหัส รหัสผ่านด้วย Bcrypt ก่อนเก็บลง Database 
 
 
